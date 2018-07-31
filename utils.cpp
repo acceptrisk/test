@@ -31,3 +31,18 @@ unsigned long long GetCurrentTimeMsec()
         return ((unsigned long long)tv.tv_sec * 1000 + (unsigned long long)tv.tv_usec / 1000);
 #endif
     }
+    
+
+//Fetch the token from string
+    		char demi[] = " ,;";
+		char *next_token = NULL; 
+		char *token = NULL;
+		token = strtok_s(logSymbols, demi, &next_token);
+		while (token != nullptr)
+		{
+			//save the token
+			m_InterestedSymbols.emplace(token);
+			MyLogger::Write("Interested Symbol: %s\n", token);
+			//get next token
+			token = strtok_s(NULL, demi, &next_token);
+		}
