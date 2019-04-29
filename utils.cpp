@@ -46,3 +46,21 @@ unsigned long long GetCurrentTimeMsec()
 			//get next token
 			token = strtok_s(NULL, demi, &next_token);
 		}
+
+// convert from const char* to LPCWSTR
+HRESULT SQLOLEDBConnection::Exec(const char* sql, LONG* plRowsAffected)
+{
+	CCommand<CNoAccessor,CNoRowset> cmd;
+	
+	wchar_t buf[1024];
+
+	mbstowcs(buf, sql, strlen(sql));
+	buf[strlen(sql)] = 0;
+	if(!SUCCEEDED(cmd.Open(m_session, buf,NULL, (DBROWCOUNT*)plRowsAffected)) )
+	{
+		return E_FAIL;
+	}
+	cmd.ReleaseCommand();
+	cmd.Close();
+	return S_OK;
+}
